@@ -77,9 +77,9 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
             "evitar que vuelvan a unirse o formen estructuras secundarias."
         ),
         "visual": (
-            f"5'- {cadena_5_3} -3'  (Hebra Molde para Cadena Rezagada)\n"
-            f"    {' ' * (longitud // 2)}<--- Horquilla de replicación abierta por Helicasa\n"
-            f"3'- {cadena_3_5} -5'  (Hebra Molde para Cadena Líder)"
+            f"{' ' * (longitud // 2)}5'- {cadena_5_3} -3'  (Hebra Molde para Cadena Rezagada)\n"
+            f"Horquilla de replicación abierta por Helicasa --->\n"
+            f"{' ' * (longitud // 2)}3'- {cadena_3_5} -5'  (Hebra Molde para Cadena Líder)"
         )
     })
 
@@ -120,8 +120,8 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
     num_fragmento = 1
 
     # Recorremos el molde 5'->3' desde su extremo 3' (el final) hacia su extremo 5' (el principio)
-    for fin in range(longitud, 0, -tam_okazaki):
-        inicio = max(0, fin - tam_okazaki)
+    for inicio in range(0, longitud, tam_okazaki):
+        fin = max(0, inicio + tam_okazaki)
         tramo_molde_5a3 = cadena_5_3[inicio:fin]
         # Invertimos el tramo para que la polimerasa lo lea en sentido 3' -> 5'
         tramo_molde_3a5 = tramo_molde_5a3[::-1]
@@ -144,14 +144,13 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
             "molde_3a5": tramo_molde_3a5,
             "cebador_arn": sub_primer_arn,
             "adn_sintetizado": sub_adn,
-            "okazaki_con_arn": f"[{sub_primer_arn}]-{sub_adn}" if sub_adn else f"[{sub_primer_arn}]",
-            "dna_maduro": secuencia_dna_maduro
+            "okazaki_con_arn": f"{sub_adn[::-1]}-[{sub_primer_arn[::-1]}]" if sub_adn else f"[{sub_primer_arn[::-1]}]",
+            "dna_maduro": secuencia_dna_maduro[::-1]
         })
         num_fragmento += 1
 
     # Descripción visual de los fragmentos (todos sintetizados en sentido 5' -> 3')
-    diagrama_okazaki = "  ".join(f"[Okz#{f['numero']}: 5'-{f['okazaki_con_arn']}-3']" for f in fragmentos_okazaki)
-
+    diagrama_okazaki = "  ".join(f"[Okz#{f['numero']}: 3'-{f['okazaki_con_arn']}-5']" for f in fragmentos_okazaki)
     pasos.append({
         "etapa": "Cadena Rezagada - Fragmentos de Okazaki",
         "enzima": "ARN Primasa + ADN Polimerasa III",
@@ -164,47 +163,59 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
         ),
         "visual": (
             f"Molde Rezagada : 5'- {cadena_5_3} -3'\n"
-            f"Molde (3'->5') : 3'- {cadena_5_3[::-1]} -5'\n"
-            f"Síntesis Okazaki (5'->3'):\n  {diagrama_okazaki}\n"
+            #f"Molde (3'->5') : 3'- {cadena_5_3[::-1]} -5'\n"
+            f"Síntesis Okazaki (3'->5'):\n  {diagrama_okazaki}\n"
             f"  Nota: Cada fragmento contiene un cebador de ARN [...] y se sintetiza estrictamente en 5'->3'."
         )
     })
 
     # --------------------------------------------------------------------------
-    # PASO 4: Maduración de Fragmentos de Okazaki y Acción de la Ligasa
+    # PASO 4: Maduración de Cebadores (Cadena Líder y Fragmentos de Okazaki)
     # --------------------------------------------------------------------------
+    primer_lider_adn = primer_lider.replace('U', 'T')
+
     pasos.append({
-        "etapa": "Reemplazo de Cebadores",
+        "etapa": "Reemplazo de Cebadores (Líder y Rezagada)",
         "enzima": "ADN Polimerasa I",
         "descripcion": (
             "La ADN Polimerasa I posee actividad exonucleasa 5'->3': degrada y elimina "
-            "los cebadores de ARN (sustituyendo los ribonucleótidos con uracilo U por desoxirribonucleótidos con timina T) "
-            "de cada fragmento de Okazaki, rellenando los huecos con ADN."
+            "todos los cebadores de ARN celulares.\n"
+            "1. En la CADENA LÍDER: retira el cebador inicial de ARN y lo reemplaza por ADN.\n"
+            "2. En la CADENA REZAGADA: retira el cebador de cada fragmento de Okazaki "
+            "sustituyendo los ribonucleótidos (U) por desoxirribonucleótidos (T)."
         ),
         "visual": (
-            f"Fragmentos madurados (5'->3'):\n  " +
-            "  ".join(f"[Okz#{f['numero']}: 5'-{f['dna_maduro']}-3']" for f in fragmentos_okazaki) +
+            f"1. Cadena Líder madurada (Cebador ARN 5'-{primer_lider}-3' -> ADN 5'-{primer_lider_adn}-3'):\n"
+            f"   5'- {cadena_lider_completa} -3'\n"
+            f"2. Fragmentos de Okazaki madurados (reemplazo de U por T):\n  " +
+            "  ".join(f"[Okz#{f['numero']}: 3'-{f['dna_maduro']}-5']" for f in fragmentos_okazaki) +
             "\n  (Persisten muescas/nicks en el esqueleto de fosfodiéster entre fragmentos)"
         )
     })
 
-    # Unión de los fragmentos madurados en sentido 5' -> 3'
+    # --------------------------------------------------------------------------
+    # PASO 5: Sellado por ADN Ligasa y Conformación Final de las Dos Dobles Hélices
+    # --------------------------------------------------------------------------
     cadena_rezagada_sellada_5a3 = "".join(f["dna_maduro"] for f in fragmentos_okazaki)
 
     pasos.append({
-        "etapa": "Sellado de Muescas (Ligación)",
+        "etapa": "Sellado de Muescas (Ligación) y Dúplex Finales",
         "enzima": "ADN Ligasa",
         "descripcion": (
             "La ADN Ligasa cataliza la formación de enlaces fosfodiéster covalentes "
             "entre el grupo 3'-OH de un fragmento madurado y el grupo 5'-fosfato del fragmento adyacente, "
-            "sellando los fragmentos en una hebra de ADN continua en dirección 5' -> 3'."
+            "sellando los fragmentos en una hebra de ADN continua en dirección 5' -> 3'.\n"
+            "Con ello, se completan las dos moléculas hijas de ADN bicatenario con carácter semiconservativo."
         ),
         "visual": (
-            f"Cadena Rezagada Sellada (5'->3'): 5'- {cadena_rezagada_sellada_5a3} -3'\n"
-            f"Apareamiento con molde original:\n"
-            f"  Molde (orientado 3'->5'):        3'- {cadena_5_3[::-1]} -5'\n"
-            f"  Nueva hebra rezagada (5'->3'):   5'- {cadena_rezagada_sellada_5a3} -3'\n"
-            f"¡Cadena continua completada con éxito!"
+            f"DÚPLEX 1 (Molde Parental 1 + Nueva Cadena Rezagada Ligada):\n"
+            f"  5'- {cadena_5_3} -3'  [Hebra Parental Original]\n"
+            f"      {'|' * longitud}      (Puentes de hidrógeno)\n"
+            f"  3'- {cadena_rezagada_sellada_5a3} -5'  [Nueva Cadena Rezagada (Fragmentos Okazaki)]\n\n"
+            f"DÚPLEX 2 (Molde Parental 2 + Nueva Cadena Líder):\n"
+            f"  3'- {cadena_3_5} -5'  [Hebra Parental Original]\n"
+            f"      {'|' * longitud}      (Puentes de hidrógeno)\n"
+            f"  5'- {cadena_lider_completa} -3'  [Nueva Cadena Líder (síntesis continua)]"
         )
     })
 
