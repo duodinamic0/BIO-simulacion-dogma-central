@@ -117,11 +117,11 @@ def simular_transcripcion(cadena_adn_5_3: str, usar_cadena_como_molde: bool = Fa
 
     burbuja_ascii = (
         f"        Doble Hélice              Burbuja de Transcripción              Doble Hélice\n"
-        f"5'- ... {codif_pre} ----\\    {codif_bur}    /---- {codif_post} ... -3' (Cadena Codificante)\n"
-        f"                           \\                      /\n"
-        f"             ARN Polimerasa [  ARNm: 5'- {arn_bur} ...  ]\n"
-        f"                           /                      \\\n"
-        f"3'- ... {molde_pre} ----/    {molde_bur}    \\---- {molde_post} ... -5' (Cadena Molde leída)"
+        f"5'- ... {codif_pre} ------/       {codif_bur}      \\---- {codif_post} ... -3' (Cadena Codificante)\n"
+        f"                         /                         \\\n"
+        f"         ARN Polimerasa [  ARNm: 5'- {arn_bur} --> ]\n"
+        f"                         \\                         /\n"
+        f"3'- ... {molde_pre} ------\\       {molde_bur}      /---- {molde_post} ... -5' (Cadena Molde leída)"
     )
 
     pasos.append({
