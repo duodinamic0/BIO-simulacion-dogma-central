@@ -109,7 +109,7 @@ def obtener_anticodon(codon: str) -> str:
     return "".join(COMPLEMENTO_ARN.get(b, 'N') for b in codon)
 
 
-def simular_traduccion(arnm_5_3: str, requerir_aug: bool = True) -> Dict[str, Any]:
+def simular_traduccion(arnm_5_3: str) -> Dict[str, Any]:
     """
     Simula la traducción de un ARNm a una cadena polipeptídica (proteína).
 
@@ -131,31 +131,29 @@ def simular_traduccion(arnm_5_3: str, requerir_aug: bool = True) -> Dict[str, An
     # PASO 1: Búsqueda del Codón de Inicio (AUG)
     # --------------------------------------------------------------------------
     indice_inicio = -1
-    if requerir_aug:
-        indice_inicio = arnm.find("AUG")
-        if indice_inicio == -1:
-            # Si no hay AUG explícito, avisar pedagógicamente
-            pasos.append({
-                "etapa": "Iniciación Fallida",
-                "enzima": "Subunidad menor del ribosoma (40S / 30S)",
-                "descripcion": (
-                    "No se encontró el codón de inicio AUG en la secuencia de ARNm. "
-                    "En condiciones celulares normales, la traducción requiere AUG (Metionina) "
-                    "para comenzar el marco abierto de lectura."
-                ),
-                "visual": f"ARNm analizado: 5'- {arnm} -3' (Sin señal AUG)"
-            })
-            return {
-                "arnm_5_3": arnm,
-                "inicio_encontrado": False,
-                "indice_inicio": -1,
-                "pasos": pasos,
-                "aminoacidos_3": [],
-                "aminoacidos_1": "",
-                "proteina_completa": "Sin síntesis (ausencia de codón AUG)"
-            }
-    else:
-        indice_inicio = 0
+    indice_inicio = arnm.find("AUG")
+    if indice_inicio == -1:
+        # Si no hay AUG explícito, avisar pedagógicamente
+        pasos.append({
+            "etapa": "Iniciación Fallida",
+            "enzima": "Subunidad menor del ribosoma (40S / 30S)",
+            "descripcion": (
+                "No se encontró el codón de inicio AUG en la secuencia de ARNm. "
+                "En condiciones celulares normales, la traducción requiere AUG (Metionina) "
+                "para comenzar el marco abierto de lectura."
+            ),
+            "visual": f"ARNm analizado: 5'- {arnm} -3' (Sin señal AUG)"
+        })
+        return {
+            "arnm_5_3": arnm,
+            "inicio_encontrado": False,
+            "indice_inicio": -1,
+            "pasos": pasos,
+            "aminoacidos_3": [],
+            "aminoacidos_1": "",
+            "proteina_completa": "Sin síntesis (ausencia de codón AUG)"
+        }
+    indice_inicio = 0
 
     codones_leidos = []
     aminoacidos_3 = []
@@ -178,6 +176,7 @@ def simular_traduccion(arnm_5_3: str, requerir_aug: bool = True) -> Dict[str, An
         "visual": (
             f"ARNm 5'-UTR : 5'- [{arn_5_utr}] (Región no traducida previa al inicio)\n"
             f"Codón Inicio: [ AUG ] en posición {indice_inicio + 1}\n"
+            f"ARNm 5'-ORF : 5'- [{arn_orf}] (Región a traducir)\n"
             f"Ribosoma    :  [Sitio E: Vacío] [Sitio P: Met-ARNt (UAC)] [Sitio A: Abierto]"
         )
     })
@@ -282,7 +281,7 @@ if __name__ == "__main__":
     arnm_demo = "AUGCGAUCGAUCGAUCGAUCGAUCGAUCGAUCUAG"
     res = simular_traduccion(arnm_demo)
     print("=== TEST TRADUCCIÓN ===")
-    for paso in res["pasos"][:3]:  # Mostrar los primeros
+    for paso in res["pasos"]:  # Mostrar los primeros
         print(f"\n[{paso['enzima']}] - {paso['etapa']}")
         print(paso['descripcion'])
         print(paso['visual'])
