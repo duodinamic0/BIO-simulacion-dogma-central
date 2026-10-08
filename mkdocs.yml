@@ -1,0 +1,70 @@
+site_name: "Simulador del Dogma Central"
+site_description: "Práctica 1 de Bioinformática: Simulación interactiva de Replicación, Transcripción y Traducción"
+site_author: "Ayoze"
+
+## Repositorio (opcional para enlace en cabecera)
+#repo_name: "BIO-simulacion-dogma-central"
+#repo_url: "https://github.com/Ayoze/BIO-simulacion-dogma-central"
+
+theme:
+  name: material
+  language: es
+  palette:
+    # Modo Claro
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+
+    # Modo Oscuro
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.tabs
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+  - attr_list
+  - md_in_html
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+# Estructura de navegación
+nav:
+  - Inicio: index.md
+  - Replicación: replicacion.md
+  - Transcripción: transcripcion.md
+  - Traducción: traduccion.md
+  # Secciones a desarrollar en los próximos pasos:
+  # - Dogma Central: dogma-central.md
+  # - Implementación: implementacion.md
+  # - Guía de Uso: uso.md
