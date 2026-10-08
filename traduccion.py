@@ -153,7 +153,6 @@ def simular_traduccion(arnm_5_3: str) -> Dict[str, Any]:
             "aminoacidos_1": "",
             "proteina_completa": "Sin síntesis (ausencia de codón AUG)"
         }
-    indice_inicio = 0
 
     codones_leidos = []
     aminoacidos_3 = []
