@@ -115,14 +115,23 @@ def simular_transcripcion(cadena_adn_5_3: str, usar_cadena_como_molde: bool = Fa
 
     arn_bur = arn_mensajero_5_3[inicio_burbuja:fin_burbuja]
 
+    # Control dinámico de espacios en función de la longitud de las secuencias
+    esp_izq = " " * (len(codif_pre) + 14)
+    hueco_central = " " * (len(codif_bur) + 15)
+    pad_pol = " " * max(0, len(esp_izq) - 16)
+    pad_tit_1 = " " * (len(codif_pre) + 3)
+    pad_tit_2 = " " * (len(codif_bur) + 4)
+
     burbuja_ascii = (
-        f"        Doble Hélice              Burbuja de Transcripción              Doble Hélice\n"
+        f"        Doble Hélice{pad_tit_1}Burbuja de Transcripción{pad_tit_2}Doble Hélice\n"
         f"5'- ... {codif_pre} ------/       {codif_bur}      \\---- {codif_post} ... -3' (Cadena Codificante)\n"
-        f"                         /                         \\\n"
-        f"         ARN Polimerasa [  ARNm: 5'- {arn_bur} --> ]\n"
-        f"                         \\                         /\n"
+        f"{esp_izq}/ {hueco_central}\\\n"
+        f"{pad_pol}ARN Polimerasa [  ARNm: 5'- {arn_bur} --> ]\n"
+        f"{esp_izq}\\ {hueco_central}/\n"
         f"3'- ... {molde_pre} ------\\       {molde_bur}      /---- {molde_post} ... -5' (Cadena Molde leída)"
     )
+
+
 
     pasos.append({
         "etapa": "Elongación y Formación de la Burbuja",
