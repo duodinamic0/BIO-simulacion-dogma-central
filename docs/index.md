@@ -5,8 +5,6 @@
   <p><em>Simulación integrada del flujo de información genética celular en Python</em></p>
 </div>
 
----
-
 ## Introducción y Objetivos
 
 El **Dogma Central de la Biología Molecular** describe el flujo unidireccional de la información genética en los sistemas biológicos. Este proyecto implementa un simulador por consola interactivo, didáctico y modular para representar en tiempo real cada una de las fases moleculares:
