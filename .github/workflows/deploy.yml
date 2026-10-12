@@ -1,0 +1,36 @@
+name: Despliegue de Documentación en GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Instalar dependencias
+        run: uv sync
+
+      - name: Desplegar documentación con MkDocs
+        run: uv run mkdocs gh-deploy --force

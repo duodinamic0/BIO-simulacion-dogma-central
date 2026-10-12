@@ -5,6 +5,8 @@
   <p><em>Simulación integrada del flujo de información genética celular en Python</em></p>
 </div>
 
+<img src="assets/images/dogma.jpg" alt="Descripcffión de la imagen">
+
 ## Introducción y Objetivos
 
 El **Dogma Central de la Biología Molecular** describe el flujo unidireccional de la información genética en los sistemas biológicos. Este proyecto implementa un simulador por consola interactivo, didáctico y modular para representar en tiempo real cada una de las fases moleculares:
@@ -23,14 +25,12 @@ flowchart LR
 
 ## Arquitectura Modular del Código
 
-El simulador está diseñado para ser limpio, desacoplado y fácil de defender ante un tribunal:
-
-| Archivo | Proceso Biológico | Enzimas y Elementos Clave |
-| :--- | :--- | :--- |
-| [`replicacion.py`](#) | Replicación Semiconservativa | Helicasa, Topoisomerasa, SSB, Primasa, ADN Pol III, ADN Pol I, Ligasa |
-| [`transcripcion.py`](#) | Transcripción ADN $\to$ ARNm | ARN Polimerasa, Promotor, Burbuja de transcripción, regla $A \to U$ |
-| [`traduccion.py`](#) | Traducción ARNm $\to$ Proteína | Ribosoma (sitios A, P, E), ARNt con anticodón, Peptidil transferasa, Factor RF |
-| [`main.py`](#) | Integrador y CLI | UI en tiempo real, modo paso a paso interactivo, reporte web HTML |
+| Archivo                 | Proceso Biológico              | Enzimas y Elementos Clave                                                      |
+|:------------------------|:-------------------------------|:-------------------------------------------------------------------------------|
+| [`replicacion.py`](#)   | Replicación Semiconservativa   | Helicasa, Topoisomerasa, SSB, Primasa, ADN Pol III, ADN Pol I, Ligasa          |
+| [`transcripcion.py`](#) | Transcripción ADN $\to$ ARNm   | ARN Polimerasa, Promotor, Burbuja de transcripción, regla $A \to U$            |
+| [`traduccion.py`](#)    | Traducción ARNm $\to$ Proteína | Ribosoma (sitios A, P, E), ARNt con anticodón, Peptidil transferasa, Factor RF |
+| [`main.py`](#)          | Integrador y CLI               | UI en tiempo real, modo paso a paso interactivo            |
 
 
 ## Inicio Rápido

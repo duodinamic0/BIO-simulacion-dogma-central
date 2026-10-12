@@ -1,185 +1,185 @@
-# Módulo de Traducción y Síntesis de Proteínas
+# Traducción del ARNm: Fundamento Teórico y Transformación de Cadenas
 
-La traducción es la etapa culminante del Dogma Central, en la cual la información genética contenida en el **ARN mensajero (ARNm)** se descodifica para sintetizar una cadena polipeptídica específica (**proteína**). Este proceso implica la transición del lenguaje nucleotídico (4 bases) al lenguaje de los aminoácidos (20 monómeros).
+La **traducción** es la etapa culminante de la expresión génica según el Dogma Central, en la cual la secuencia de ribonucleótidos del **ARN mensajero (ARNm)** se decodifica en los ribosomas para ensamblar una secuencia lineal de aminoácidos (**cadena polipeptídica o proteína**).
 
----
+<img src="../assets/images/traduc.jpg" alt="Descripción de la imagen">
 
-## 1. Fundamento Biológico y Maquinaria Molecular
+## 1. Contexto Teórico
 
-La síntesis de proteínas tiene lugar en los **ribosomas** celulares y procede siempre con una polaridad estricta: desde el extremo **Amino-terminal ($N\text{-terminal}$)** hacia el extremo **Carboxilo-terminal ($C\text{-terminal}$)**.
+### Principios Biológicos Clave
 
-```mermaid
-flowchart TD
-    subgraph Iniciacion ["1. Iniciación"]
-        SubMenor["Subunidad Menor escanea 5'→3'"]
-        CodonAUG["Localiza codón de inicio AUG"]
-        MetARNt["Met-ARNt se une en Sitio P"]
-        SubMayor["Acoplamiento de Subunidad Mayor"]
-        SubMenor --> CodonAUG --> MetARNt --> SubMayor
-    end
+1. **Lectura por Tripletes (Codones)**: La información del ARNm se lee de 3 en 3 nucleótidos de forma continua, no solapante y sin signos de puntuación, en dirección **$5' \to 3'$**.
+2. **Direccionalidad Peptídica**: La síntesis de la proteína se efectúa estrictamente desde el **extremo Amino-terminal ($N\text{-terminal}$)** hacia el **extremo Carboxilo-terminal ($C\text{-terminal}$)**.
+3. **El Código Genético Universal**:
+    - **64 codones posibles** ($4^3$), de los cuales 61 codifican aminoácidos y 3 son codones de parada (*Stop*).
+    - **Codón de Inicio Universal**: **`AUG`**, que codifica para **Metionina (Met)** y define el marco abierto de lectura (*Open Reading Frame - ORF*).
+    - **Codones de Parada (*Stop*)**: **`UAA`**, **`UAG`** y **`UGA`**, que provocan el fin de la traducción.
+    - **Degenerado o redundante**: Varios codones pueden codificar para el mismo aminoácido.
+4. **Acoplamiento Codón-Anticodón**: Las moléculas de **ARN de transferencia (ARNt)** actúan como adaptadores moleculares portando un aminoácido en su extremo $3'$ y un **anticodón** complementario y antiparalelo ($3' \to 5'$) que reconoce el codón del ARNm ($5' \to 3'$).
 
-    subgraph Elongacion ["2. Elongación (Ciclo Ribosomal)"]
-        SitioA["Sitio A: Entrada del aminoacil-ARNt complementario"]
-        Peptidil["Sitio P: Peptidil transferasa cataliza el enlace peptídico"]
-        Translocacion["Translocación: Ribosoma avanza 3 nucleótidos (1 codón)"]
-        SitioE["Sitio E: Salida del ARNt descargado"]
-        SitioA --> Peptidil --> Translocacion --> SitioE
-    end
-
-    subgraph Terminacion ["3. Terminación"]
-        Stop["Codón Stop entra en Sitio A (UAA, UAG, UGA)"]
-        RF["Factor de Liberación (RF) hidroliza el péptido"]
-        Disociacion["Liberación de proteína y disociación ribosomal"]
-        Stop --> RF --> Disociacion
-    end
-
-    Iniciacion --> Elongacion --> Terminacion
+```text
+ARNm (5'→3')       :  5'-  A     U     G  -3'   (Codón de Inicio)
+                           |     |     |        (Apareamiento antiparalelo)
+ARNt Anticodón     :  3'-  U     A     C  -5'   (Met-ARNt)
+                           \___________/
+Aminoácido cargado :      [ Metionina ]  --> Extremo N-terminal de la proteína
 ```
 
-### Los Tres Sitios Funcionales del Ribosoma
-
-El ribosoma dispone de tres cavidades activas clave para coordinar la lectura del ARNm y la polimerización de aminoácidos:
+### Dinámica de los Sitios Ribosomales
 
 | Sitio Ribosomal | Nombre Biológico | Función Molecular |
 | :---: | :--- | :--- |
-| **Sitio A** | **Aminoacilo** (*Aminoacyl*) | Punto de entrada donde se acomoda el nuevo ARNt cargado con su aminoácido específico, verificando el apareamiento codón-anticodón. |
-| **Sitio P** | **Peptidilo** (*Peptidyl*) | Retiene el ARNt unido a la cadena polipeptídica en crecimiento. Aquí reside la actividad catalítica de la **peptidil transferasa**. |
-| **Sitio E** | **Salida** (*Exit*) | Aloja transitoriamente al ARNt desacilado (sin aminoácido) antes de ser expulsado al citoplasma para su posterior recarga. |
+| **Sitio A** | **Aminoacilo** (*Aminoacyl*) | Recepción del nuevo aminoacil-ARNt según el codón expuesto. |
+| **Sitio P** | **Peptidilo** (*Peptidyl*) | Retención del peptidil-ARNt y catálisis del enlace peptídico por la peptidil transferasa. |
+| **Sitio E** | **Salida** (*Exit*) | Expulsión del ARNt desacilado tras la translocación del ribosoma. |
 
----
 
-## 2. El Código Genético Universal
 
-El código genético establece las reglas de correspondencia entre tripletes de nucleótidos (**codones**) y los aminoácidos incorporados:
+## 2. Desglose de Transformación de Cadenas en `traduccion.py`
 
-* **Tripletes**: $4^3 = 64$ combinaciones posibles de codones.
-* **Codón de Inicio Universal**: **`AUG`**, que codifica para **Metionina (Met)** y define el marco abierto de lectura (*Open Reading Frame - ORF*).
-* **Codones de Parada (*Stop*)**: **`UAA`** (Ocre), **`UAG`** (Ámbar) y **`UGA`** (Ópalo). No codifican ningún aminoácido; son reconocidos por factores de liberación proteicos.
+A continuación se detalla exclusivamente la lógica de manipulación de cadenas implementada en [`traduccion.py`](https://github.com/Ayoze/BIO-simulacion-dogma-central/blob/main/traduccion.py).
 
-### Propiedades Biológicas Esenciales
 
-1. **Universalidad**: Con mínimas excepciones evolutivas, el mismo codón codifica para el mismo aminoácido en prácticamente todas las formas de vida.
-2. **Degeneración o Redundancia**: Existen 61 codones con sentido para solo 20 aminoácidos. Varios aminoácidos están codificados por más de un codón (ej. Leucina y Arginina cuentan con 6 codones cada una).
-3. **No solapante y sin puntuación**: La lectura se realiza de forma continua de 3 en 3 nucleótidos a partir del codón AUG, sin espacios ni omisiones.
 
-???+ note "Tabla Completa del Código Genético Universal (64 codones)"
-    | 1ª Base | 2ª Base: U | 2ª Base: C | 2ª Base: A | 2ª Base: G | 3ª Base |
-    | :---: | :--- | :--- | :--- | :--- | :---: |
-    | **U** | UUU - Phe (F)<br>UUC - Phe (F)<br>UUA - Leu (L)<br>UUG - Leu (L) | UCU - Ser (S)<br>UCC - Ser (S)<br>UCA - Ser (S)<br>UCG - Ser (S) | UAU - Tyr (Y)<br>UAC - Tyr (Y)<br>**UAA - STOP**<br>**UAG - STOP** | UGU - Cys (C)<br>UGC - Cys (C)<br>**UGA - STOP**<br>UGG - Trp (W) | **U**<br>**C**<br>**A**<br>**G** |
-    | **C** | CUU - Leu (L)<br>CUC - Leu (L)<br>CUA - Leu (L)<br>CUG - Leu (L) | CCU - Pro (P)<br>CCC - Pro (P)<br>CCA - Pro (P)<br>CCG - Pro (P) | CAU - His (H)<br>CAC - His (H)<br>CAA - Gln (Q)<br>CAG - Gln (Q) | CGU - Arg (R)<br>CGC - Arg (R)<br>CGA - Arg (R)<br>CGG - Arg (R) | **U**<br>**C**<br>**A**<br>**G** |
-    | **A** | AUU - Ile (I)<br>AUC - Ile (I)<br>AUA - Ile (I)<br>**AUG - Met (M) [INICIO]** | ACU - Thr (T)<br>ACC - Thr (T)<br>ACA - Thr (T)<br>ACG - Thr (T) | AAU - Asn (N)<br>AAC - Asn (N)<br>AAA - Lys (K)<br>AAG - Lys (K) | AGU - Ser (S)<br>AGC - Ser (S)<br>AGA - Arg (R)<br>AGG - Arg (R) | **U**<br>**C**<br>**A**<br>**G** |
-    | **G** | GUU - Val (V)<br>GUC - Val (V)<br>GUA - Val (V)<br>GUG - Val (V) | GCU - Ala (A)<br>GCC - Ala (A)<br>GCA - Ala (A)<br>GCG - Ala (A) | GAU - Asp (D)<br>GAC - Asp (D)<br>GAA - Glu (E)<br>GAG - Glu (E) | GGU - Gly (G)<br>GGC - Gly (G)<br>GGA - Gly (G)<br>GGG - Gly (G) | **U**<br>**C**<br>**A**<br>**G** |
+### Paso 1: Definición de la Tabla del Código Genético y Mapeo Antiparalelo
 
-!!! tip "Pregunta clave de examen / defensa"
-    **¿Por qué el ARNt iniciador (Met-ARNt) ingresa directamente en el Sitio P y no en el Sitio A?**
-    Es el único ARNt que tiene esta propiedad biológica. Entra al sitio P durante la fase de iniciación para dejar el **Sitio A libre**, permitiendo que el segundo aminoacil-ARNt pueda ingresar y la peptidil transferasa forme el **primer enlace peptídico**. Si entrara al sitio A, no existiría ningún extremo peptidil con el que formar enlace.
-
----
-
-## 3. Implementación Algorítmica en Python
-
-El módulo [`traduccion.py`](#) implementa la traducción procesando rigurosamente los marcos de lectura:
-
-### A. Diccionario de Descodificación con Propiedades Bioquímicas
-El código modela no solo los aminoácidos, sino también su abreviatura internacional y su naturaleza fisicoquímica:
+Para decodificar secuencias de ARN, el módulo define el código genético completo y las reglas de complementariedad de ribonucleótidos:
 
 ```python
+# Mapeo del código genético universal: codon -> (codigo_3, codigo_1, nombre, propiedad)
 TABLA_CODIGO_GENETICO = {
     'AUG': ('Met', 'M', 'Metionina (INICIO)', 'Apolar / Inicio universal'),
-    'GCC': ('Ala', 'A', 'Alanina', 'Apolar / Hidrófobo'),
-    'AAC': ('Asn', 'N', 'Asparagina', 'Polar neutro'),
-    'GUA': ('Val', 'V', 'Valina', 'Apolar / Hidrófobo'),
-    'CGU': ('Arg', 'R', 'Arginina', 'Carga positiva / Básico'),
-    'GAU': ('Asp', 'D', 'Aspartato', 'Carga negativa / Ácido'),
+    'UUU': ('Phe', 'F', 'Fenilalanina', 'Apolar / Hidrófobo'),
     'UAA': ('STOP', '*', 'Codón de Parada (Ocre)', 'Señal de Terminación'),
-    # ... los 64 codones implementados
+    'UAG': ('STOP', '*', 'Codón de Parada (Ámbar)', 'Señal de Terminación'),
+    'UGA': ('STOP', '*', 'Codón de Parada (Ópalo)', 'Señal de Terminación'),
+    # ... total de 64 codones
+}
+
+# Reglas de complementariedad entre ARN mensajero y ARN de transferencia
+COMPLEMENTO_ARN = {
+    'A': 'U', 'U': 'A',
+    'C': 'G', 'G': 'C'
 }
 ```
 
-### B. El Bucle de Elongación y Translocación
-El algoritmo localiza el primer codón `AUG` y avanza de 3 en 3 nucleótidos modelando la dinámica ribosomal:
+**Explicación:**  
+Cada triplete posible de nucleótidos de ARNm se asocia en $O(1)$ con su aminoácido correspondiente en nomenclatura de 3 letras, 1 letra y propiedades químicas. A su vez, `COMPLEMENTO_ARN` define la interacción entre ribonucleótidos ($A=U$ y $C \equiv G$) requerida para deducir el anticodón del ARNt.
+
+```text
+[ Triplete ARNm (5'->3') ]           [ Decodificación a Aminoácido ]
+         AUG              =======>    Met (M)  [Inicio]
+         GCC              =======>    Ala (A)  [Apolar]
+         AAC              =======>    Asn (N)  [Polar neutro]
+         UAA / UAG / UGA  =======>    STOP (*) [Terminación]
+```
+
+
+### Paso 2: Generación del Anticodón Antiparalelo del ARNt
+
+La interacción entre el codón expuesto en el ribosoma y el ARNt adaptador exige calcular la secuencia antiparalela del anticodón:
+
+```python
+def obtener_anticodon(codon: str) -> str:
+    """
+    Obtiene el anticodón de ARNt antiparalelo (3' -> 5') correspondiente al codón (5' -> 3').
+    Ejemplo: Codón 5'-AUG-3' -> Anticodón 3'-UAC-5'.
+    """
+    return "".join(COMPLEMENTO_ARN.get(b, 'N') for b in codon)
+```
+
+**Explicación:**  
+La función recibe una subcadena de tres caracteres correspondiente a un codón ($5' \to 3'$) y la transforma base a base en su secuencia complementaria. Esta cadena resultante representa el anticodón leído en sentido $3' \to 5'$, garantizando el apareamiento antiparalelo exacto dentro del ribosoma.
+
+```text
+Codón ARNm (5'->3')      :   5'-   A       U       G   -3'
+                                   |       |       |   (Complementariedad de ARN)
+Anticodón ARNt (3'->5')  :   3'-   U       A       C   -5'
+                                   \_______________/
+                                    Met-ARNt cargado
+```
+
+
+### Paso 3: Identificación del Marco Abierto de Lectura (Búsqueda de `AUG`)
+
+Antes de traducir de tres en tres nucleótidos, el algoritmo debe descartar la región no traducida ($5'\text{-UTR}$) y fijar el marco de lectura en el primer triplete `AUG`:
+
+```python
+arnm = arnm_5_3.upper().strip()
+
+indice_inicio = arnm.find("AUG")
+
+if indice_inicio != -1:
+    arn_5_utr = arnm[:indice_inicio]
+    arn_orf = arnm[indice_inicio:]
+```
+
+**Explicación:**  
+`arnm.find("AUG")` localiza el índice de la primera ocurrencia de la señal de inicio de traducción. Mediante *slicing*, la cadena se subdivide en dos tramos: `arn_5_utr`, que abarca los nucleótidos previos al inicio que el ribosoma escanea sin traducir, y `arn_orf`, que constituye el marco abierto de lectura a procesar.
+
+```text
+Cadena ARNm:  5'-  G  G  A  C  U  [ A  U  G ]  C  G  A  U  C  U  A  G  -3'
+                   \___________/  \___________________________________/
+                     5'-UTR            Marco Abierto de Lectura (ORF)
+                  (No traducido)          (Inicia traducción aquí)
+```
+
+
+
+### Paso 4: Bucle de Elongación y Detección de Codones de Parada
+
+Una vez establecido el marco de lectura, el algoritmo itera en ventanas discretas de 3 nucleótidos hasta encontrar una señal de término o el final de la cadena:
 
 ```python
 i = indice_inicio
+aminoacidos_3 = []
+aminoacidos_1 = []
+
 while i + 3 <= len(arnm):
     triplete = arnm[i:i+3]
-    codigo_3, codigo_1, nombre, propiedad = TABLA_CODIGO_GENETICO[triplete]
-    anticodon = obtener_anticodon(triplete)  # Apareamiento antiparalelo 3'->5'
+    info_aa = TABLA_CODIGO_GENETICO.get(triplete, ('???', '?', 'Desconocido', 'Desconocido'))
+    codigo_3, codigo_1, nombre, propiedad = info_aa
+    anticodon = obtener_anticodon(triplete)
 
     if codigo_3 == 'STOP':
-        # Factor de liberación reconoce el codón y finaliza la síntesis
+        codon_stop_encontrado = True
         break
 
     aminoacidos_3.append(codigo_3)
-    i += 3  # Translocación: avance de 1 codón hacia el extremo 3'
+    aminoacidos_1.append(codigo_1)
+    i += 3
 ```
 
----
-
-## 4. Trazabilidad en Consola y Salida del Simulador
-
-Durante la traducción, la CLI desglosa el comportamiento del ribosoma en tiempo real:
+**Explicación:**  
+El puntero `i` avanza en saltos de 3 posiciones (`i += 3`), simulando la translocación del ribosoma. Para cada triplete, consulta `TABLA_CODIGO_GENETICO`. Si el triplete corresponde a uno de los tres codones de parada (`STOP`), el bucle se interrumpe inmediatamente emulando la acción de los factores de liberación. De lo contrario, almacena el aminoácido en las listas acumuladoras.
 
 ```text
-┌── [ ENZIMA / FACTOR: Complejo Ribosomal + ARNt iniciador (Met-ARNt) ] ─────────────
-│ Etapa: Iniciación de la Traducción
-│ La subunidad menor escanea hasta hallar AUG. El Met-ARNt acopla su anticodón (3'-UAC-5').
-│ La subunidad mayor se ensambla ubicando el iniciador en el Sitio P.
-│
-│ Representación molecular en tiempo real:
-│   ARNm 5'-UTR : 5'- [] (Región no traducida)
-│   Codón Inicio: [ AUG ] en posición 1
-│   Ribosoma    : [Sitio E: Vacío] [Sitio P: Met-ARNt (UAC)] [Sitio A: Abierto]
-└───────────────────────────────────────────────────────────────────────────────────
-
-┌── [ ENZIMA / FACTOR: Peptidil Transferasa + ARNt específico ] ─────────────────────
-│ Etapa: Elongación - Ciclo #5 (Codón CGU)
-│ - Sitio A: Ingresa ARNt portando 'Arg' (Arginina) con anticodón 3'-GCA-5'.
-│ - Sitio P: La Peptidil Transferasa cataliza el enlace peptídico.
-│ - Translocación: El ribosoma avanza 3 nucleótidos hacia 3'. El ARNt usado sale por Sitio E.
-│
-│ Representación molecular en tiempo real:
-│   ARNm leído     : ... [ CGU ] ...
-│   Anticodón ARNt : ... [ 3'-GCA-5' ] cargando Arg
-│   Cadena naciente: H2N- Met - Ala - Asn - Val - Arg -COOH
-└───────────────────────────────────────────────────────────────────────────────────
-
-┌── [ ENZIMA / FACTOR: Factor de Liberación (Release Factor - RF) ] ─────────────────
-│ Etapa: Terminación de la Traducción
-│ Codón de Parada encontrado: UAA (Codón de Parada (Ocre)).
-│ El Factor RF hidroliza el polipéptido y provoca la disociación ribosomal completa.
-│
-│ Representación molecular en tiempo real:
-│   Proteína Sintetizada: H2N- Met - Ala - Asn - Val - Arg - Ser - Asp - Glu - Ala - Tyr -COOH
-│   Secuencia 1-letra   : MANVRSDEAY
-│   Longitud            : 10 aminoácidos sintetizados.
-└───────────────────────────────────────────────────────────────────────────────────
+Ciclo 1 (i=0) :  5'-[AUG]-3'  -->  Met (M)  -->  Anticodón 3'-UAC-5'
+Ciclo 2 (i=3) :  5'-[CGA]-3'  -->  Arg (R)  -->  Anticodón 3'-GCU-5'
+Ciclo 3 (i=6) :  5'-[UCG]-3'  -->  Ser (S)  -->  Anticodón 3'-AGC-5'
+Ciclo 4 (i=9) :  5'-[UAG]-3'  -->  STOP     -->  ¡Fin de traducción! (Break)
 ```
 
-### Desglose de Codones y Propiedades de los Aminoácidos
 
-| Ciclo | Codón (ARNm $5' \to 3'$) | Anticodón (ARNt $3' \to 5'$) | Aminoácido | Propiedad Química |
-| :---: | :---: | :---: | :---: | :--- |
-| **#1** | `5'- AUG -3'` | `3'- UAC -5'` | **Met (M)** | Apolar / Inicio universal |
-| **#2** | `5'- GCC -3'` | `3'- CGG -5'` | **Ala (A)** | Apolar / Hidrófobo |
-| **#3** | `5'- AAC -3'` | `3'- UUG -5'` | **Asn (N)** | Polar neutro |
-| **#4** | `5'- GUA -3'` | `3'- CAU -5'` | **Val (V)** | Apolar / Hidrófobo |
-| **#5** | `5'- CGU -3'` | `3'- GCA -5'` | **Arg (R)** | Carga positiva / Básico |
-| **#6** | `5'- UCA -3'` | `3'- AGU -5'` | **Ser (S)** | Polar neutro |
-| **#7** | `5'- GAU -3'` | `3'- CUA -5'` | **Asp (D)** | Carga negativa / Ácido |
-| **#8** | `5'- GAA -3'` | `3'- CUU -5'` | **Glu (E)** | Carga negativa / Ácido |
-| **#9** | `5'- GCC -3'` | `3'- CGG -5'` | **Ala (A)** | Apolar / Hidrófobo |
-| **#10**| `5'- UAC -3'` | `3'- AUG -5'` | **Tyr (Y)** | Polar neutro / Aromático |
-| **#11**| `5'- UAA -3'` | `3'- --- -5'` | **STOP (*)** | Señal de Terminación |
 
----
+### Paso 5: Ensamblaje de la Cadena Polipeptídica Final
 
-## 5. El Producto Final: La Proteína Madura
+Finalizada la lectura de codones, las listas de aminoácidos se unen para conformar la representación química de la proteína:
 
-El flujo culmina con la obtención de la secuencia peptídica completa:
+```python
+# Polipéptido formal con extremos Amino y Carboxilo terminales
+cadena_proteica = f"H2N- {' - '.join(aminoacidos_3)} -COOH" if aminoacidos_3 else "Cadena vacía"
 
-$$\text{H}_2\text{N}-\text{Met}-\text{Ala}-\text{Asn}-\text{Val}-\text{Arg}-\text{Ser}-\text{Asp}-\text{Glu}-\text{Ala}-\text{Tyr}-\text{COOH}$$
+# Secuencia condensada en notación de una letra (estándar FASTA)
+secuencia_fasta = "".join(aminoacidos_1)
+```
 
-$$\text{Secuencia FASTA (1 letra): } \mathbf{MANVRSDEAY}$$
+**Explicación:**  
+Se generan dos cadenas de salida: `cadena_proteica`, que concatena los códigos de 3 letras mediante enlaces tipo ` - ` respetando los extremos terminales biológicos ($\text{H}_2\text{N}-$ en el extremo $5'$ del ARNm y $-\text{COOH}$ en el extremo $3'$), y `secuencia_fasta`, que condensa los monómeros en una sola cadena de texto alfanumérico según el estándar bioinformático internacional.
 
-De este modo se cierra el círculo del Dogma Central: desde una secuencia de nucleótidos de ADN original hasta una molécula funcional de proteína.
+```text
+Secuencia en 3 letras:  H2N- Met - Arg - Ser - Ala - Tyr -COOH
+                        (N-terminal)                   (C-terminal)
+
+Secuencia FASTA (1L) :  MRSAY
+```

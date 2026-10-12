@@ -1,164 +1,195 @@
-# Módulo de Replicación del ADN
+# Replicación del ADN: Fundamento Teórico y Flujo del Simulador
 
-La replicación es el proceso celular mediante el cual una molécula de ADN bicatenario se duplica de manera **semiconservativa**, dando lugar a dos moléculas de ADN hijas idénticas, cada una portando una hebra original parental y una hebra de nueva síntesis.
+La **replicación del ADN** es el mecanismo molecular que permite a una célula duplicar su material genético con alta fidelidad antes de dividirse, asegurando que cada célula hija reciba una copia idéntica del genoma.
 
----
+<img src="../assets/images/replication.jpg" alt="Descripción de la imagen">
 
-## 1. Fundamento Biológico y Maquinaria Molecular
+## 1. Contexto Teórico
 
-La replicación celular está regida por dos restricciones moleculares fundamentales:
-1. **Unidireccionalidad de síntesis**: Las ADN polimerasas **únicamente pueden sintetizar en dirección $5' \to 3'$**, requiriendo un extremo $3'\text{-OH}$ libre preexistente para incorporar nuevos desoxirribonucleótidos (dNTPs).
-2. **Antiparalelismo**: La doble hélice de ADN está compuesta por dos cadenas antiparalelas ($5' \to 3'$ y $3' \to 5'$).
+### Principios Biológicos Fundamentales
 
-```mermaid
-flowchart TD
-    subgraph Horquilla ["Horquilla de Replicación"]
-        Helic["⚡ Helicasa<br>(Rompe puentes de H)"]
-        SSB["🛡️ Proteínas SSB<br>(Estabilizan monocatenario)"]
-        Topo["🌀 Topoisomerasa<br>(Alivia tensión torsional)"]
-    end
+El proceso de replicación en organismos vivos se rige por tres principios inquebrantables:
 
-    subgraph Sintesis ["Procesos de Polimerización"]
-        Lider["🟢 Cadena Líder (Continua)<br>Molde 3'→5' | Síntesis 5'→3'"]
-        Rezagada["🟠 Cadena Rezagada (Discontinua)<br>Molde 5'→3' | Fragmentos de Okazaki"]
-    end
+1. **Carácter Semiconservativo**: Cada una de las dos moléculas de ADN hijas resultantes conserva una hebra original de la molécula madre (hebra parental) y una hebra de nueva síntesis.
+2. **Unidireccionalidad ($5' \to 3'$)**: Las ADN polimerasas únicamente son capaces de catalizar la adición de desoxirribonucleótidos al grupo hidroxilo libre en el extremo $3'\text{-OH}$ de una cadena en crecimiento. Ninguna polimerasa celular puede sintetizar en sentido $3' \to 5'$.
+3. **Antiparalelismo y Asimetría**: Las dos hebras de la doble hélice discurren en orientaciones opuestas ($5' \to 3'$ y $3' \to 5'$). Al abrirse la horquilla en un único sentido, se genera una asimetría obligada:
+    - **Cadena Líder (continua)**: Se sintetiza de manera ininterrumpida en la misma dirección en que avanza la horquilla.
+    - **Cadena Rezagada (discontinua)**: Se sintetiza en dirección contraria al avance de la horquilla mediante tramos cortos denominados **Fragmentos de Okazaki**.
 
-    Horquilla --> Sintesis
-    Rezagada --> PolI["✂️ ADN Polimerasa I<br>(Elimina cebadores ARN y rellena con ADN)"]
-    PolI --> Ligasa["🔗 ADN Ligasa<br>(Sella enlaces fosfodiéster)"]
-```
+[//]: # (```mermaid)
 
-### Cuadro de Enzimas y Factores Simulados
+[//]: # (flowchart LR)
 
-| Enzima / Factor | Función Biológica en la Célula | Representación en el Simulador |
-| :--- | :--- | :--- |
-| **Helicasa** | Rompe los puentes de hidrógeno entre pares de bases para abrir la horquilla. | Separa la doble cadena y expone las hebras molde. |
-| **Topoisomerasa / Girasa** | Alivia la tensión superhelicoidal por delante de la horquilla. | Registra la desestabilización torsional previa al avance. |
-| **Proteínas SSB** | Evitan que las cadenas sencillas abiertas vuelvan a aparearse. | Mantiene las cadenas molde disponibles para la síntesis. |
-| **ARN Primasa** | Sintetiza cebadores (*primers*) de ARN cortos con un grupo $3'\text{-OH}$ libre. | Genera oligoribonucleótidos complementarios ($3\text{ pb}$). |
-| **ADN Polimerasa III** | Sintetiza la cadena continua líder y los tramos de ADN en los fragmentos de Okazaki. | Elonga en sentido $5' \to 3'$ a partir de cada cebador. |
-| **ADN Polimerasa I** | Degrada cebadores de ARN (exonucleasa $5' \to 3'$) y rellena las brechas con ADN. | Reemplaza ribonucleótidos por desoxirribonucleótidos. |
-| **ADN Ligasa** | Cataliza enlaces fosfodiéster covalentes entre fragmentos de Okazaki contiguos. | Sella las muescas (*nicks*) generando una cadena continua. |
+[//]: # (    subgraph Horquilla["Apertura y Estabilización"])
 
----
+[//]: # (        H["Helicasa<br>&#40;Rompe puentes de H&#41;"])
 
-## 2. La Asimetría de la Horquilla: Líder vs. Rezagada
+[//]: # (        T["Topoisomerasa<br>&#40;Alivia tensión torsional&#41;"])
 
-Debido a que la horquilla de replicación se abre en una única dirección, las dos cadenas molde deben sintetizarse con estrategias completamente distintas:
+[//]: # (        S["Proteínas SSB<br>&#40;Evitan reasociación&#41;"])
 
-### A. Cadena Líder (Adelantada / Continua)
-* **Molde**: Hebra orientada en sentido $3' \to 5'$.
-* **Mecanismo**: La ARN Primasa coloca **un único cebador** en el extremo inicial. A partir de él, la ADN Polimerasa III sintetiza de forma continua en dirección $5' \to 3'$, avanzando en el mismo sentido en que la Helicasa abre la horquilla.
+[//]: # (    end)
 
-### B. Cadena Rezagada (Retrasada / Discontinua)
-* **Molde**: Hebra orientada en sentido $5' \to 3'$.
-* **Mecanismo**: La polimerasa no puede avanzar en sentido contrario a la horquilla de forma continua. Por ello:
-  1. A medida que la horquilla se abre, la ARN Primasa sintetiza **múltiples cebadores periódicos**.
-  2. La ADN Polimerasa III sintetiza pequeños bloques de ADN llamados **Fragmentos de Okazaki**.
-  3. Cada fragmento consta inicialmente de: $\text{[Cebador de ARN]} + \text{[Tramo de ADN recién sintetizado]}$.
+[//]: # ()
+[//]: # (    subgraph Sintesis["Polimerización"])
 
-!!! tip "Pregunta clave de examen / defensa"
-    **¿Por qué la ADN polimerasa no puede sintetizar directamente en dirección $3' \to 5'$?**
-    La síntesis celular utiliza la energía del enlace fosfoanhídrido de los dNTPs entrantes. Si una polimerasa sintetizara de $3' \to 5'$, la corrección de errores (actividad exonucleasa) eliminaría el nucleótido del extremo $5'$, destruyendo el grupo trifosfato de activación y bloqueando la elongación de la cadena.
+[//]: # (        Lider["Cadena Líder<br>&#40;Síntesis continua 5'→3'&#41;"])
 
----
+[//]: # (        Rezagada["Cadena Rezagada<br>&#40;Fragmentos de Okazaki 5'→3'&#41;"])
 
-## 3. Implementación Algorítmica en Python
+[//]: # (    end)
 
-El módulo [`replicacion.py`](#) encapsula toda la lógica de replicación dividiendo el proceso en etapas secuenciales y devolviendo un diccionario de estado detallado.
+[//]: # ()
+[//]: # (    subgraph Maduracion["Maduración y Sellado"])
 
-### A. Reglas de Complementariedad
-Las reglas de apareamiento canónico se modelan mediante diccionarios en tiempo constante $O(1)$:
+[//]: # (        PolI["ADN Polimerasa I<br>&#40;Retira ARN cebador y rellena con ADN&#41;"])
+
+[//]: # (        Lig["ADN Ligasa<br>&#40;Sella enlaces fosfodiéster&#41;"])
+
+[//]: # (    end)
+
+[//]: # ()
+[//]: # (    Horquilla --> Sintesis --> Maduracion)
+
+[//]: # (```)
+
+### La Maquinaria Enzimática
+
+| Enzima / Factor | Función Biológica Principal |
+| :--- | :--- |
+| **Helicasa** | Rompe los puentes de hidrógeno entre pares de bases para abrir la doble hélice. |
+| **Topoisomerasa (Girasa)** | Corta transitoriamente el esqueleto fosfodiéster para liberar el superenrollamiento torsional. |
+| **Proteínas SSB** | Se unen a las cadenas monocatenarias expuestas para evitar que se reasocien o degraden. |
+| **ARN Primasa** | Sintetiza oligonucleótidos cortos de ARN (*cebadores* o *primers*) que ofrecen el extremo $3'\text{-OH}$ inicial. |
+| **ADN Polimerasa III** | Principal enzima de elongación; replica la cadena continua y los fragmentos de Okazaki en sentido $5' \to 3'$. |
+| **ADN Polimerasa I** | Posee actividad exonucleasa $5' \to 3'$: degrada los cebadores de ARN y los sustituye por ADN. |
+| **ADN Ligasa** | Cataliza el enlace fosfodiéster covalente entre fragmentos vecinos sellando las muescas (*nicks*). |
+
+
+
+## 2. Flujo de Ejecución en `replicacion.py`
+
+A continuación se detalla paso a paso cómo está implementado el simulador en el archivo [`replicacion.py`](https://github.com/Ayoze/BIO-simulacion-dogma-central/blob/main/replicacion.py). Cada paso muestra el fragmento de código correspondiente, una explicación breve de su función bioinformática y su representación gráfica.
+
+
+
+### Paso 1: Diccionarios de Complementariedad Molecular
+
+Para modelar la interacción química entre nucleótidos, el módulo define tablas de equivalencia directa:
 
 ```python
-# Apareamiento estándar ADN bicatenario: A=T, C≡G
+# Reglas de complementariedad para ADN: A <-> T, C <-> G
 COMPLEMENTO_ADN = {
     'A': 'T', 'T': 'A',
-    'C': 'G', 'G': 'C'
+    'C': 'G', 'G': 'C',
+    'a': 't', 't': 'a',
+    'c': 'g', 'g': 'c'
 }
 
-# Síntesis de cebadores de ARN sobre molde de ADN: A→U, T→A, C→G, G→C
+# Complementariedad para síntesis de ARN primer: ADN -> ARN (A->U, T->A, C->G, G->C)
 COMPLEMENTO_ARN = {
     'A': 'U', 'T': 'A',
-    'C': 'G', 'G': 'C'
+    'C': 'G', 'G': 'C',
+    'a': 'u', 't': 'a',
+    'c': 'g', 'g': 'c'
 }
 ```
 
-### B. Generación y Maduración de Fragmentos de Okazaki
-En la cadena rezagada, el algoritmo itera sobre la hebra molde dividiéndola en ventanas discretas de longitud configurable (`tam_okazaki` y `tam_primer`):
+**Explicación:**  
+Se emplean dos mapeos fundamentales: `COMPLEMENTO_ADN` replica el apareamiento canónico de Watson-Crick ($A=T$ con 2 puentes de hidrógeno y $C \equiv G$ con 3 puentes). Por su parte, `COMPLEMENTO_ARN` simula la acción de la ARN Primasa, incorporando **Uracilo (U)** en lugar de Timina cuando el molde presenta Adenina.
+
+
+
+### Paso 2: Determinación de la Hebra Antiparalela Molde
+
+Antes de abrir la horquilla, el algoritmo identifica ambas cadenas parentales según la orientación provista por el usuario:
+
+```python
+def obtener_cadena_complementaria(cadena_adn: str) -> str:
+    """Devuelve la cadena complementaria de ADN respetando A-T y C-G."""
+    return "".join(COMPLEMENTO_ADN.get(base.upper(), 'N') for base in cadena_adn)
+
+# Dentro de simular_replicacion:
+if es_5a3:
+    cadena_5_3 = cadena_adn
+    cadena_3_5 = obtener_cadena_complementaria(cadena_5_3)
+else:
+    cadena_3_5 = cadena_adn
+    cadena_5_3 = obtener_cadena_complementaria(cadena_3_5)
+```
+
+**Explicación:**  
+Si la secuencia de entrada se suministra en dirección $5' \to 3'$, la hebra complementaria correspondiente estará orientada en sentido $3' \to 5'$. Esto define cuál de las dos actuará como molde para la síntesis continua y cuál para la síntesis discontinua.
+
+
+
+### Paso 3: Síntesis de la Cadena Líder (Continua)
+
+Con la horquilla abierta, se simula la replicación directa de la hebra con orientación molde $3' \to 5'$:
+
+```python
+# Molde: Hebra 3' -> 5' (cadena_3_5)
+# Síntesis: Se realiza de forma continua en sentido 5' -> 3' avanzando hacia la horquilla.
+primer_lider = "".join(COMPLEMENTO_ARN[b] for b in cadena_3_5[:tam_primer])
+adn_lider_restante = "".join(COMPLEMENTO_ADN[b] for b in cadena_3_5[tam_primer:])
+cadena_lider_completa = "".join(COMPLEMENTO_ADN[b] for b in cadena_3_5)
+```
+
+**Explicación:**  
+Como la ADN Polimerasa III lee el molde en sentido $3' \to 5'$, puede sintetizar de forma continua en dirección $5' \to 3'$. Solo requiere un **único cebador inicial** colocado por la ARN Primasa para arrancar la elongación hasta el final de la cadena.
+
+### Paso 4: Síntesis Discontinua de la Cadena Rezagada (Okazaki)
+
+Para la hebra parental con orientación $5' \to 3'$, la polimerasa no puede avanzar en la misma dirección que la horquilla:
 
 ```python
 fragmentos_okazaki = []
-inicio = 0
-while inicio < longitud:
-    fin = min(inicio + tam_okazaki, longitud)
-    tramo_molde = cadena_5_3[inicio:fin]
+num_fragmento = 1
 
-    # 1. ARN Primasa: sintetiza cebador
-    long_primer = min(tam_primer, len(tramo_molde))
-    cebador_arn = "".join(COMPLEMENTO_ARN[b] for b in tramo_molde[:long_primer])
+# Recorremos el molde 5'->3' fragmentándolo en bloques discretos
+for inicio in range(0, longitud, tam_okazaki):
+    fin = max(0, inicio + tam_okazaki)
+    tramo_molde_5a3 = cadena_5_3[inicio:fin]
+    tramo_molde_3a5 = tramo_molde_5a3[::-1]
 
-    # 2. ADN Polimerasa III: elongación de ADN
-    adn_elongado = "".join(COMPLEMENTO_ADN[b] for b in tramo_molde[long_primer:])
+    long_primer_frag = min(tam_primer, len(tramo_molde_3a5))
+    # Cebador de ARN sintetizado en sentido 5' -> 3'
+    sub_primer_arn = "".join(COMPLEMENTO_ARN[b] for b in tramo_molde_3a5[:long_primer_frag])
+    # ADN elongado en sentido 5' -> 3' por ADN Polimerasa III
+    sub_adn = "".join(COMPLEMENTO_ADN[b] for b in tramo_molde_3a5[long_primer_frag:])
+    secuencia_total_okazaki = sub_primer_arn + sub_adn
+    secuencia_dna_maduro = "".join(COMPLEMENTO_ADN[b] for b in tramo_molde_3a5)
 
-    # 3. ADN Polimerasa I + Ligasa: reemplazo a ADN y unión
-    adn_maduro = "".join(COMPLEMENTO_ADN[b] for b in tramo_molde)
-
-    fragmentos_okazaki.append({
-        "cebador_arn": cebador_arn,
-        "adn_sintetizado": adn_elongado,
-        "dna_maduro": adn_maduro
-    })
-    inicio = fin
+    num_fragmento += 1
 ```
 
----
+**Explicación:**  
+El código divide la cadena en fragmentos (`tam_okazaki`). Cada bloque se lee localmente en sentido $3' \to 5'$, generando un cebador de ARN específico con la Primasa y elongando un segmento de ADN con la Polimerasa III. El resultado es una serie de fragmentos discretos orientados cada uno en $5' \to 3'$.
 
-## 4. Trazabilidad en Consola y Salida del Simulador
 
-Durante la ejecución, el simulador muestra paso a paso las tarjetas de actividad enzimática:
+### Paso 5: Maduración de Cebadores (ADN Polimerasa I)
 
-```text
-┌── [ ENZIMA / FACTOR: Helicasa + Topoisomerasa + SSB ] ─────────────────────────────
-│ Etapa: [1/5] Iniciación de la horquilla
-│ La Helicasa rompe los puentes de hidrógeno, abriendo la doble hélice.
-│ La Topoisomerasa alivia la tensión torsional y las SSB estabilizan las hebras.
-│
-│ Representación molecular en tiempo real:
-│   5'- ATGGCCAACGTACGTTCAGATGAAGCCTACTAA -3'  (Molde Cadena Rezagada)
-│                        <--- Horquilla abierta por Helicasa
-│   3'- TACCGGTTGCATGCAAGTCTACTTCGGATGATT -5'  (Molde Cadena Líder)
-└───────────────────────────────────────────────────────────────────────────────────
+Una vez completada la elongación, los cebadores de ARN deben ser eliminados de ambas cadenas:
 
-┌── [ ENZIMA / FACTOR: ARN Primasa + ADN Polimerasa III ] ───────────────────────────
-│ Etapa: [3/5] Cadena Rezagada - Fragmentos de Okazaki
-│ La síntesis es discontinua en sentido contrario al avance de la horquilla.
-│ Se sintetizan múltiples cebadores de ARN seguidos de ADN.
-│
-│ Representación molecular en tiempo real:
-│   Molde Rezagada : 5'- ATGGCCAACGTACGTTCAGATGAAGCCTACTAA -3'
-│   Síntesis Okazaki: [Okz#1: 5'-[UAC]-CGGTTGC-3']  [Okz#2: 5'-[AUG]-CAAGUC-3'] ...
-└───────────────────────────────────────────────────────────────────────────────────
-
-┌── [ ENZIMA / FACTOR: ADN Ligasa ] ────────────────────────────────────────────────
-│ Etapa: [5/5] Sellado de Muescas (Ligation)
-│ La ADN Ligasa cataliza los enlaces fosfodiéster uniendo los fragmentos contiguos.
-│
-│ Representación molecular en tiempo real:
-│   Cadena Rezagada Sellada: 3'- TACCGGTTGCATGCAAGTCTACTTCGGATGATT -5'
-│   Molde Original         : 5'- ATGGCCAACGTACGTTCAGATGAAGCCTACTAA -3'
-│   ¡Cadena continua completada con éxito!
-└───────────────────────────────────────────────────────────────────────────────────
+```python
+primer_lider_adn = primer_lider.replace('U', 'T')
+# Para la cadena rezagada, se hizo el cambio en pasos anteriores
 ```
 
----
+**Explicación:**  
+La **ADN Polimerasa I** utiliza su actividad exonucleasa $5' \to 3'$ para degradar el ARN ribonucleotídico y reemplazarlo por desoxirribonucleótidos de ADN (cambiando $U$ por $T$). Aunque las bases son ahora todas de ADN, aún no existe un enlace fosfodiéster que una físicamente los fragmentos contiguos (quedan *muescas* o *nicks*).
 
-## 5. Demostración Semiconservativa
 
-Al finalizar la etapa de replicación, el sistema valida que las dos moléculas hijas contienen exactamente una hebra parental y una hebra sintetizada de novo:
 
-$$\text{Molécula 1} = \text{Parental (5'→3')} + \text{Rezagada Nueva (3'→5')}$$
+### Paso 6: Sellado Covalente de Muescas (ADN Ligasa)
 
-$$\text{Molécula 2} = \text{Parental (3'→5')} + \text{Líder Nueva (5'→3')}$$
+Para finalizar la síntesis de la hebra discontinua, los fragmentos de Okazaki maduros deben ligarse covalentemente:
 
-Ambos dúplex son completamente idénticos en secuencia, preservando fielmente la información genética celular.
+```python
+cadena_rezagada_sellada_5a3 = "".join(f["dna_maduro"] for f in fragmentos_okazaki)
+```
+
+**Explicación:**  
+La **ADN Ligasa** consume un cofactor energético ($NAD^+$ o $ATP$) para condensar el grupo fosfato terminal con el hidroxilo vecino, consolidando el esqueleto de azúcar-fosfato y convirtiendo la serie de fragmentos en una hebra de ADN totalmente continua.
+
+
