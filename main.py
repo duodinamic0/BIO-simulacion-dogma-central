@@ -999,7 +999,7 @@ def main():
         opcion = safe_input(f"{C.BOLD}Selecciona una opción (1-6): {C.RESET}").strip()
 
         if opcion in ["6", ""]:
-            print(f"\n{C.CYAN}¡Hasta pronto! Mucho éxito en tu defensa de Bioinformática.{C.RESET}\n")
+            print(f"\n{C.CYAN}¡Hasta pronto!{C.RESET}\n")
             break
 
         if opcion not in ["1", "2", "3", "4", "5"]:
