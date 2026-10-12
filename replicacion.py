@@ -41,14 +41,16 @@ def obtener_cadena_complementaria(cadena_adn: str) -> str:
     return "".join(COMPLEMENTO_ADN.get(base.upper(), 'N') for base in cadena_adn)
 
 
-def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int = 3) -> Dict[str, Any]:
+def simular_replicacion(cadena_adn: str, tam_okazaki: int = 10, tam_primer: int = 3, es_5a3: bool = True) -> Dict[str, Any]:
     """
     Simula paso a paso la replicación de una molécula de ADN bicatenario.
 
     Parámetros:
-      cadena_5_3: Hebra original 1 en sentido 5' -> 3'.
+      cadena_adn: Secuencia de ADN introducida.
       tam_okazaki: Tamaño en nucleótidos de cada fragmento de Okazaki (por defecto 10).
       tam_primer: Tamaño en ribonucleótidos de cada cebador de ARN (por defecto 3).
+      es_5a3: Indica si la secuencia suministrada está orientada en sentido 5' -> 3' (True)
+              o en sentido 3' -> 5' (False).
 
     Retorna un diccionario completo con:
       - Hebras parentales
@@ -57,9 +59,16 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
       - Detalle de la cadena rezagada (fragmentos de Okazaki, cebadores, reemplazo y ligación)
       - Nuevas moléculas bicatenarias resultantes (demostrando semiconservatividad)
     """
-    cadena_5_3 = cadena_5_3.upper().strip()
-    longitud = len(cadena_5_3)
-    cadena_3_5 = obtener_cadena_complementaria(cadena_5_3)
+    cadena_adn = cadena_adn.upper().strip()
+    longitud = len(cadena_adn)
+
+    if es_5a3:
+        cadena_5_3 = cadena_adn
+        cadena_3_5 = obtener_cadena_complementaria(cadena_5_3)
+    else:
+        cadena_3_5 = cadena_adn
+        cadena_5_3 = obtener_cadena_complementaria(cadena_3_5)
+
 
     pasos = []
 
@@ -77,9 +86,9 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
             "evitar que vuelvan a unirse o formen estructuras secundarias."
         ),
         "visual": (
-            f"{' ' * (longitud // 2)}5'- {cadena_5_3} -3'  (Hebra Molde para Cadena Rezagada)\n"
+            f"     5'- {cadena_5_3} -3'  (Hebra Molde para Cadena Rezagada)\n"
             f"Horquilla de replicación abierta por Helicasa --->\n"
-            f"{' ' * (longitud // 2)}3'- {cadena_3_5} -5'  (Hebra Molde para Cadena Líder)"
+            f"     3'- {cadena_3_5} -5'  (Hebra Molde para Cadena Líder)"
         )
     })
 
@@ -244,7 +253,8 @@ def simular_replicacion(cadena_5_3: str, tam_okazaki: int = 10, tam_primer: int 
         "cadena_lider": cadena_lider_completa,
         "cadena_rezagada": cadena_rezagada_sellada_5a3,
         "pasos": pasos,
-        "resultado_final": resultado_final
+        "resultado_final": resultado_final,
+        "es_5a3": es_5a3
     }
 
 
