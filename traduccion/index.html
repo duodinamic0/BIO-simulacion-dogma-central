@@ -1,0 +1,957 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Práctica 1 de Bioinformática: Simulación interactiva de Replicación, Transcripción y Traducción">
+      
+      
+        <meta name="author" content="Ayoze">
+      
+      
+      
+        <link rel="prev" href="../transcripcion/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Traducción - Simulador del Dogma Central</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#traduccion-del-arnm-fundamento-teorico-y-transformacion-de-cadenas" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Simulador del Dogma Central" class="md-header__button md-logo" aria-label="Simulador del Dogma Central" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Simulador del Dogma Central
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Traducción
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../replicacion/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Replicación
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../transcripcion/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Transcripción
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Traducción
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Simulador del Dogma Central" class="md-nav__button md-logo" aria-label="Simulador del Dogma Central" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Simulador del Dogma Central
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../replicacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transcripcion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcripción
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Traducción
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Traducción
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-contexto-teorico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Contexto Teórico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Contexto Teórico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principios-biologicos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principios Biológicos Clave
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dinamica-de-los-sitios-ribosomales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dinámica de los Sitios Ribosomales
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-desglose-de-transformacion-de-cadenas-en-traduccionpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Desglose de Transformación de Cadenas en traduccion.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Desglose de Transformación de Cadenas en traduccion.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-definicion-de-la-tabla-del-codigo-genetico-y-mapeo-antiparalelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Definición de la Tabla del Código Genético y Mapeo Antiparalelo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-generacion-del-anticodon-antiparalelo-del-arnt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Generación del Anticodón Antiparalelo del ARNt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-identificacion-del-marco-abierto-de-lectura-busqueda-de-aug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Identificación del Marco Abierto de Lectura (Búsqueda de AUG)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-bucle-de-elongacion-y-deteccion-de-codones-de-parada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Bucle de Elongación y Detección de Codones de Parada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-ensamblaje-de-la-cadena-polipeptidica-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Ensamblaje de la Cadena Polipeptídica Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-contexto-teorico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Contexto Teórico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Contexto Teórico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principios-biologicos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principios Biológicos Clave
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dinamica-de-los-sitios-ribosomales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dinámica de los Sitios Ribosomales
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-desglose-de-transformacion-de-cadenas-en-traduccionpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Desglose de Transformación de Cadenas en traduccion.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Desglose de Transformación de Cadenas en traduccion.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-definicion-de-la-tabla-del-codigo-genetico-y-mapeo-antiparalelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Definición de la Tabla del Código Genético y Mapeo Antiparalelo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-generacion-del-anticodon-antiparalelo-del-arnt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Generación del Anticodón Antiparalelo del ARNt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-identificacion-del-marco-abierto-de-lectura-busqueda-de-aug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Identificación del Marco Abierto de Lectura (Búsqueda de AUG)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-bucle-de-elongacion-y-deteccion-de-codones-de-parada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Bucle de Elongación y Detección de Codones de Parada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-ensamblaje-de-la-cadena-polipeptidica-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Ensamblaje de la Cadena Polipeptídica Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="traduccion-del-arnm-fundamento-teorico-y-transformacion-de-cadenas">Traducción del ARNm: Fundamento Teórico y Transformación de Cadenas</h1>
+<p>La <strong>traducción</strong> es la etapa culminante de la expresión génica según el Dogma Central, en la cual la secuencia de ribonucleótidos del <strong>ARN mensajero (ARNm)</strong> se decodifica en los ribosomas para ensamblar una secuencia lineal de aminoácidos (<strong>cadena polipeptídica o proteína</strong>).</p>
+<p><img src="../assets/images/traduc.jpg" alt="Descripción de la imagen"></p>
+<h2 id="1-contexto-teorico">1. Contexto Teórico</h2>
+<h3 id="principios-biologicos-clave">Principios Biológicos Clave</h3>
+<ol>
+<li><strong>Lectura por Tripletes (Codones)</strong>: La información del ARNm se lee de 3 en 3 nucleótidos de forma continua, no solapante y sin signos de puntuación, en dirección <strong><span class="arithmatex">\(5' \to 3'\)</span></strong>.</li>
+<li><strong>Direccionalidad Peptídica</strong>: La síntesis de la proteína se efectúa estrictamente desde el <strong>extremo Amino-terminal (<span class="arithmatex">\(N\text{-terminal}\)</span>)</strong> hacia el <strong>extremo Carboxilo-terminal (<span class="arithmatex">\(C\text{-terminal}\)</span>)</strong>.</li>
+<li><strong>El Código Genético Universal</strong>:<ul>
+<li><strong>64 codones posibles</strong> (<span class="arithmatex">\(4^3\)</span>), de los cuales 61 codifican aminoácidos y 3 son codones de parada (<em>Stop</em>).</li>
+<li><strong>Codón de Inicio Universal</strong>: <strong><code>AUG</code></strong>, que codifica para <strong>Metionina (Met)</strong> y define el marco abierto de lectura (<em>Open Reading Frame - ORF</em>).</li>
+<li><strong>Codones de Parada (<em>Stop</em>)</strong>: <strong><code>UAA</code></strong>, <strong><code>UAG</code></strong> y <strong><code>UGA</code></strong>, que provocan el fin de la traducción.</li>
+<li><strong>Degenerado o redundante</strong>: Varios codones pueden codificar para el mismo aminoácido.</li>
+</ul>
+</li>
+<li><strong>Acoplamiento Codón-Anticodón</strong>: Las moléculas de <strong>ARN de transferencia (ARNt)</strong> actúan como adaptadores moleculares portando un aminoácido en su extremo <span class="arithmatex">\(3'\)</span> y un <strong>anticodón</strong> complementario y antiparalelo (<span class="arithmatex">\(3' \to 5'\)</span>) que reconoce el codón del ARNm (<span class="arithmatex">\(5' \to 3'\)</span>).</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ARNm (5'→3')       :  5'-  A     U     G  -3'   (Codón de Inicio)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                           |     |     |        (Apareamiento antiparalelo)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>ARNt Anticodón     :  3'-  U     A     C  -5'   (Met-ARNt)
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                           \___________/
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Aminoácido cargado :      [ Metionina ]  --&gt; Extremo N-terminal de la proteína
+</span></code></pre></div>
+<h3 id="dinamica-de-los-sitios-ribosomales">Dinámica de los Sitios Ribosomales</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Sitio Ribosomal</th>
+<th style="text-align: left;">Nombre Biológico</th>
+<th style="text-align: left;">Función Molecular</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Sitio A</strong></td>
+<td style="text-align: left;"><strong>Aminoacilo</strong> (<em>Aminoacyl</em>)</td>
+<td style="text-align: left;">Recepción del nuevo aminoacil-ARNt según el codón expuesto.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Sitio P</strong></td>
+<td style="text-align: left;"><strong>Peptidilo</strong> (<em>Peptidyl</em>)</td>
+<td style="text-align: left;">Retención del peptidil-ARNt y catálisis del enlace peptídico por la peptidil transferasa.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Sitio E</strong></td>
+<td style="text-align: left;"><strong>Salida</strong> (<em>Exit</em>)</td>
+<td style="text-align: left;">Expulsión del ARNt desacilado tras la translocación del ribosoma.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-desglose-de-transformacion-de-cadenas-en-traduccionpy">2. Desglose de Transformación de Cadenas en <code>traduccion.py</code></h2>
+<p>A continuación se detalla exclusivamente la lógica de manipulación de cadenas implementada en <a href="https://github.com/Ayoze/BIO-simulacion-dogma-central/blob/main/traduccion.py"><code>traduccion.py</code></a>.</p>
+<h3 id="paso-1-definicion-de-la-tabla-del-codigo-genetico-y-mapeo-antiparalelo">Paso 1: Definición de la Tabla del Código Genético y Mapeo Antiparalelo</h3>
+<p>Para decodificar secuencias de ARN, el módulo define el código genético completo y las reglas de complementariedad de ribonucleótidos:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Mapeo del código genético universal: codon -&gt; (codigo_3, codigo_1, nombre, propiedad)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">TABLA_CODIGO_GENETICO</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="s1">'AUG'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'Met'</span><span class="p">,</span> <span class="s1">'M'</span><span class="p">,</span> <span class="s1">'Metionina (INICIO)'</span><span class="p">,</span> <span class="s1">'Apolar / Inicio universal'</span><span class="p">),</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="s1">'UUU'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'Phe'</span><span class="p">,</span> <span class="s1">'F'</span><span class="p">,</span> <span class="s1">'Fenilalanina'</span><span class="p">,</span> <span class="s1">'Apolar / Hidrófobo'</span><span class="p">),</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="s1">'UAA'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'STOP'</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">,</span> <span class="s1">'Codón de Parada (Ocre)'</span><span class="p">,</span> <span class="s1">'Señal de Terminación'</span><span class="p">),</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="s1">'UAG'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'STOP'</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">,</span> <span class="s1">'Codón de Parada (Ámbar)'</span><span class="p">,</span> <span class="s1">'Señal de Terminación'</span><span class="p">),</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="s1">'UGA'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'STOP'</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">,</span> <span class="s1">'Codón de Parada (Ópalo)'</span><span class="p">,</span> <span class="s1">'Señal de Terminación'</span><span class="p">),</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="c1"># ... total de 64 codones</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Reglas de complementariedad entre ARN mensajero y ARN de transferencia</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">COMPLEMENTO_ARN</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="s1">'A'</span><span class="p">:</span> <span class="s1">'U'</span><span class="p">,</span> <span class="s1">'U'</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="s1">'C'</span><span class="p">:</span> <span class="s1">'G'</span><span class="p">,</span> <span class="s1">'G'</span><span class="p">:</span> <span class="s1">'C'</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Explicación:</strong><br />
+Cada triplete posible de nucleótidos de ARNm se asocia en <span class="arithmatex">\(O(1)\)</span> con su aminoácido correspondiente en nomenclatura de 3 letras, 1 letra y propiedades químicas. A su vez, <code>COMPLEMENTO_ARN</code> define la interacción entre ribonucleótidos (<span class="arithmatex">\(A=U\)</span> y <span class="arithmatex">\(C \equiv G\)</span>) requerida para deducir el anticodón del ARNt.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[ Triplete ARNm (5'-&gt;3') ]           [ Decodificación a Aminoácido ]
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>         AUG              =======&gt;    Met (M)  [Inicio]
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>         GCC              =======&gt;    Ala (A)  [Apolar]
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>         AAC              =======&gt;    Asn (N)  [Polar neutro]
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>         UAA / UAG / UGA  =======&gt;    STOP (*) [Terminación]
+</span></code></pre></div>
+<h3 id="paso-2-generacion-del-anticodon-antiparalelo-del-arnt">Paso 2: Generación del Anticodón Antiparalelo del ARNt</h3>
+<p>La interacción entre el codón expuesto en el ribosoma y el ARNt adaptador exige calcular la secuencia antiparalela del anticodón:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">obtener_anticodon</span><span class="p">(</span><span class="n">codon</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="sd">    Obtiene el anticodón de ARNt antiparalelo (3' -&gt; 5') correspondiente al codón (5' -&gt; 3').</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="sd">    Ejemplo: Codón 5'-AUG-3' -&gt; Anticodón 3'-UAC-5'.</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="sd">    """</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">COMPLEMENTO_ARN</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">'N'</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">codon</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Explicación:</strong><br />
+La función recibe una subcadena de tres caracteres correspondiente a un codón (<span class="arithmatex">\(5' \to 3'\)</span>) y la transforma base a base en su secuencia complementaria. Esta cadena resultante representa el anticodón leído en sentido <span class="arithmatex">\(3' \to 5'\)</span>, garantizando el apareamiento antiparalelo exacto dentro del ribosoma.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Codón ARNm (5'-&gt;3')      :   5'-   A       U       G   -3'
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>                                   |       |       |   (Complementariedad de ARN)
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Anticodón ARNt (3'-&gt;5')  :   3'-   U       A       C   -5'
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>                                   \_______________/
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>                                    Met-ARNt cargado
+</span></code></pre></div>
+<h3 id="paso-3-identificacion-del-marco-abierto-de-lectura-busqueda-de-aug">Paso 3: Identificación del Marco Abierto de Lectura (Búsqueda de <code>AUG</code>)</h3>
+<p>Antes de traducir de tres en tres nucleótidos, el algoritmo debe descartar la región no traducida (<span class="arithmatex">\(5'\text{-UTR}\)</span>) y fijar el marco de lectura en el primer triplete <code>AUG</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">arnm</span> <span class="o">=</span> <span class="n">arnm_5_3</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">indice_inicio</span> <span class="o">=</span> <span class="n">arnm</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"AUG"</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="k">if</span> <span class="n">indice_inicio</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">arn_5_utr</span> <span class="o">=</span> <span class="n">arnm</span><span class="p">[:</span><span class="n">indice_inicio</span><span class="p">]</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">arn_orf</span> <span class="o">=</span> <span class="n">arnm</span><span class="p">[</span><span class="n">indice_inicio</span><span class="p">:]</span>
+</span></code></pre></div>
+<p><strong>Explicación:</strong><br />
+<code>arnm.find("AUG")</code> localiza el índice de la primera ocurrencia de la señal de inicio de traducción. Mediante <em>slicing</em>, la cadena se subdivide en dos tramos: <code>arn_5_utr</code>, que abarca los nucleótidos previos al inicio que el ribosoma escanea sin traducir, y <code>arn_orf</code>, que constituye el marco abierto de lectura a procesar.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Cadena ARNm:  5'-  G  G  A  C  U  [ A  U  G ]  C  G  A  U  C  U  A  G  -3'
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>                   \___________/  \___________________________________/
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>                     5'-UTR            Marco Abierto de Lectura (ORF)
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>                  (No traducido)          (Inicia traducción aquí)
+</span></code></pre></div>
+<h3 id="paso-4-bucle-de-elongacion-y-deteccion-de-codones-de-parada">Paso 4: Bucle de Elongación y Detección de Codones de Parada</h3>
+<p>Una vez establecido el marco de lectura, el algoritmo itera en ventanas discretas de 3 nucleótidos hasta encontrar una señal de término o el final de la cadena:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">i</span> <span class="o">=</span> <span class="n">indice_inicio</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">aminoacidos_3</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">aminoacidos_1</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">while</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arnm</span><span class="p">):</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">triplete</span> <span class="o">=</span> <span class="n">arnm</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">info_aa</span> <span class="o">=</span> <span class="n">TABLA_CODIGO_GENETICO</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">triplete</span><span class="p">,</span> <span class="p">(</span><span class="s1">'???'</span><span class="p">,</span> <span class="s1">'?'</span><span class="p">,</span> <span class="s1">'Desconocido'</span><span class="p">,</span> <span class="s1">'Desconocido'</span><span class="p">))</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">codigo_3</span><span class="p">,</span> <span class="n">codigo_1</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">propiedad</span> <span class="o">=</span> <span class="n">info_aa</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="n">anticodon</span> <span class="o">=</span> <span class="n">obtener_anticodon</span><span class="p">(</span><span class="n">triplete</span><span class="p">)</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="k">if</span> <span class="n">codigo_3</span> <span class="o">==</span> <span class="s1">'STOP'</span><span class="p">:</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="n">codon_stop_encontrado</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="k">break</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="n">aminoacidos_3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">codigo_3</span><span class="p">)</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="n">aminoacidos_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">codigo_1</span><span class="p">)</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span>
+</span></code></pre></div>
+<p><strong>Explicación:</strong><br />
+El puntero <code>i</code> avanza en saltos de 3 posiciones (<code>i += 3</code>), simulando la translocación del ribosoma. Para cada triplete, consulta <code>TABLA_CODIGO_GENETICO</code>. Si el triplete corresponde a uno de los tres codones de parada (<code>STOP</code>), el bucle se interrumpe inmediatamente emulando la acción de los factores de liberación. De lo contrario, almacena el aminoácido en las listas acumuladoras.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Ciclo 1 (i=0) :  5'-[AUG]-3'  --&gt;  Met (M)  --&gt;  Anticodón 3'-UAC-5'
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Ciclo 2 (i=3) :  5'-[CGA]-3'  --&gt;  Arg (R)  --&gt;  Anticodón 3'-GCU-5'
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Ciclo 3 (i=6) :  5'-[UCG]-3'  --&gt;  Ser (S)  --&gt;  Anticodón 3'-AGC-5'
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>Ciclo 4 (i=9) :  5'-[UAG]-3'  --&gt;  STOP     --&gt;  ¡Fin de traducción! (Break)
+</span></code></pre></div>
+<h3 id="paso-5-ensamblaje-de-la-cadena-polipeptidica-final">Paso 5: Ensamblaje de la Cadena Polipeptídica Final</h3>
+<p>Finalizada la lectura de codones, las listas de aminoácidos se unen para conformar la representación química de la proteína:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Polipéptido formal con extremos Amino y Carboxilo terminales</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">cadena_proteica</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"H2N- </span><span class="si">{</span><span class="s1">' - '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">aminoacidos_3</span><span class="p">)</span><span class="si">}</span><span class="s2"> -COOH"</span> <span class="k">if</span> <span class="n">aminoacidos_3</span> <span class="k">else</span> <span class="s2">"Cadena vacía"</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Secuencia condensada en notación de una letra (estándar FASTA)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">secuencia_fasta</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">aminoacidos_1</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Explicación:</strong><br />
+Se generan dos cadenas de salida: <code>cadena_proteica</code>, que concatena los códigos de 3 letras mediante enlaces tipo <code>-</code> respetando los extremos terminales biológicos (<span class="arithmatex">\(\text{H}_2\text{N}-\)</span> en el extremo <span class="arithmatex">\(5'\)</span> del ARNm y <span class="arithmatex">\(-\text{COOH}\)</span> en el extremo <span class="arithmatex">\(3'\)</span>), y <code>secuencia_fasta</code>, que condensa los monómeros en una sola cadena de texto alfanumérico según el estándar bioinformático internacional.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Secuencia en 3 letras:  H2N- Met - Arg - Ser - Ala - Tyr -COOH
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>                        (N-terminal)                   (C-terminal)
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>Secuencia FASTA (1L) :  MRSAY
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.tabs", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
